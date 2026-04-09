@@ -185,17 +185,26 @@ def income_expenses(sid, reqs, vals):
         cond(sid,1,4,101,5, "=AND(E2<>\"\",E2>0)", RED_F, RED_T),
         freeze(sid), tab_color(sid, GRN_F), auto_resize(sid,0,COLS),
     ]
-    rows = [["Date","Category","Description","Income","Expense","Balance"],
-            ["2024-04-01","Dine-In","Lunch service",1250.00,"","=IF(D3<>\"\",D3,0)-IF(E3<>\"\",E3,0)+F2"],
-            ["2024-04-01","Food & Beverage","Produce order","",320.00,"=IF(D4<>\"\",D4,0)-IF(E4<>\"\",E4,0)+F3"],
-            ["2024-04-01","Labor","Staff wages","",780.00,"=IF(D5<>\"\",D5,0)-IF(E5<>\"\",E5,0)+F4"],
-            ["2024-04-02","Takeout","Online orders",430.00,"","=IF(D6<>\"\",D6,0)-IF(E6<>\"\",E6,0)+F5"],
-            ["2024-04-02","Delivery","Third-party delivery",210.00,"","=IF(D7<>\"\",D7,0)-IF(E7<>\"\",E7,0)+F6"],
-            ["2024-04-02","Utilities","Electric & gas","",195.00,"=IF(D8<>\"\",D8,0)-IF(E8<>\"\",E8,0)+F7"],
-            ["2024-04-03","Bar Sales","Weekend bar",680.00,"","=IF(D9<>\"\",D9,0)-IF(E9<>\"\",E9,0)+F8"],
-            ["2024-04-03","Rent","Monthly rent","",3200.00,"=IF(D10<>\"\",D10,0)-IF(E10<>\"\",E10,0)+F9"],
-            ["2024-04-03","Marketing","Social media ads","",150.00,"=IF(D11<>\"\",D11,0)-IF(E11<>\"\",E11,0)+F10"],
-            ["2024-04-04","Catering","Private event",1800.00,"","=IF(D12<>\"\",D12,0)-IF(E12<>\"\",E12,0)+F11"]]
+    sample_data = [
+        ["2024-04-01","Dine-In","Lunch service",1250.00,""],
+        ["2024-04-01","Food & Beverage","Produce order","",320.00],
+        ["2024-04-01","Labor","Staff wages","",780.00],
+        ["2024-04-02","Takeout","Online orders",430.00,""],
+        ["2024-04-02","Delivery","Third-party delivery",210.00,""],
+        ["2024-04-02","Utilities","Electric & gas","",195.00],
+        ["2024-04-03","Bar Sales","Weekend bar",680.00,""],
+        ["2024-04-03","Rent","Monthly rent","",3200.00],
+        ["2024-04-03","Marketing","Social media ads","",150.00],
+        ["2024-04-04","Catering","Private event",1800.00,""],
+    ]
+    rows = [["Date","Category","Description","Income","Expense","Balance"]]
+    for i, row in enumerate(sample_data):
+        n = i + 2  # row 2 is first data row (row 1 is header)
+        if n == 2:
+            bal = f'=IF(D{n}<>"",D{n},0)-IF(E{n}<>"",E{n},0)'
+        else:
+            bal = f'=IF(D{n}<>"",D{n},0)-IF(E{n}<>"",E{n},0)+F{n-1}'
+        rows.append(row + [bal])
     vals += [("'Income & Expenses'!A1", rows),
              ("'Income & Expenses'!A102", [["TOTALS","","","=SUM(D2:D101)","=SUM(E2:E101)","=D102-E102"]])]
 
