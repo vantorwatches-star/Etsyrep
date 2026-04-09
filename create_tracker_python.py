@@ -127,12 +127,17 @@ def auto_resize(sid, start=0, end=20):
                        "startIndex": start, "endIndex": end}}}
 
 def cond(sid, r1, c1, r2, c2, formula, bg, tc):
+    # Conditional format rules only support: backgroundColor, textFormat with
+    # bold/italic/strikethrough/foregroundColor (no fontSize or fontFamily).
+    fmt = {}
+    if bg: fmt["backgroundColor"] = bg
+    if tc: fmt["textFormat"] = {"foregroundColor": tc, "bold": True}
     return {"addConditionalFormatRule": {
         "rule": {"ranges": [gr(sid,r1,c1,r2,c2)],
                  "booleanRule": {
                      "condition": {"type": "CUSTOM_FORMULA",
                                    "values": [{"userEnteredValue": formula}]},
-                     "format": cfmt(bg=bg, tf=tfmt(fg=tc))}},
+                     "format": fmt}},
         "index": 0}}
 
 CURRENCY = {"type": "CURRENCY", "pattern": "$#,##0.00"}
